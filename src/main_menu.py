@@ -10,12 +10,9 @@ def display_main_menu():
 
 def get_menu_input():
     choice=input("Enter your choice: ")
-    try: 
-        assert choice<=3 
-        return choice
-    except: 
-        print "You inputted a number other than the choices given."
-        get_menu_input()
+    return choice   
 
-    
+def select_option():
+    choice=input("Enter (1)-Edit, (2)Delete: ")
+    return choice
     

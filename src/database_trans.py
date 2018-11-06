@@ -35,12 +35,12 @@ class Database:
                 result=Database.cursor.fetchall()
                 for row in result:
                     print "%d||%s||%.2f||%d" %(row[0],row[1],row[2],row[3])
+                return result
             else:
-                print "None Found"
-                
+                return "None Found"                
             Database.db.commit()
         except(MySQLdb.Error, MySQLdb.Warning) as e:
-            print "An error occurred."
+            return "An error occurred."
             
     def delete_product(self, pid):
         sql="DELETE FROM products WHERE pid=%d" %(pid)
@@ -56,14 +56,17 @@ class Database:
             return "An error occurred while deleting..."
         
     def update_product(self, pid, pname, pprice, pstocks):
-        sql="UPDATE products SET pname=%s, pprice=%.2f, pstocks=%d"
+        sql="UPDATE products SET pname='%s', pprice='%.2f', pstocks='%d' WHERE pid='%d'" %\
+            (pname, pprice, pstocks, pid)
         try:
-            Databse.cursor.execute(sql)
-            if(Database.cursor.rowcount>0):
-                return "%s has been updated successfully." %(pname.capwords())
-        except:
+            Database.cursor.execute(sql)  
+            print "%s has been updated successfully." %(pname.capwords())
+            Database.db.commit()
+            return "Success!!!"
+        except(MySQLdb.Error, MySQLdb.Warning) as e:
             Database.db.rollback()
-            return "Failed to update this product."
+            print e
+            return "Sorry!Update failed..."
             
             
             
