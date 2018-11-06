@@ -2,6 +2,7 @@
 # To change this template file, choose Tools | Templates
 # and open the template in the editor.
 import MySQLdb
+import string
 class Database:
     cursor=0
     db=0
@@ -51,6 +52,13 @@ class Database:
         except:
             Database.db.rollback()
             return "An error occurred while deleting..."
+        
+    def update_product(self, pid, pname, pprice, pstocks):
+        sql="UPDATE products SET pname=%s, pprice=%.2f, pstocks=%d"
+            try:
+                Databse.cursor.execute(sql)
+                if(Database.cursor.rowcount>0):
+                    return ""
             
             
         
