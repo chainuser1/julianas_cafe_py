@@ -24,15 +24,17 @@ class Database:
             return "An error occurred."
         
         
-    def search_product(self, pname):
+    def search_products(self, pname):
         sql="SELECT * FROM products WHERE pname LIKE '%s'" %("%"+pname+"%")
+        pid=0
         try:
             Database.cursor.execute(sql)
             if(Database.cursor.rowcount>0):
                 print "%d found" %(Database.cursor.rowcount)
+                print "ID||Product Name||Price||Stocks"
                 result=Database.cursor.fetchall()
                 for row in result:
-                    print "Product Name: %s Product Price: %.2f " %(row[1],row[2])
+                    print "%d||%s||%.2f||%d" %(row[0],row[1],row[2],row[3])
             else:
                 print "None Found"
                 
@@ -55,10 +57,14 @@ class Database:
         
     def update_product(self, pid, pname, pprice, pstocks):
         sql="UPDATE products SET pname=%s, pprice=%.2f, pstocks=%d"
-            try:
-                Databse.cursor.execute(sql)
-                if(Database.cursor.rowcount>0):
-                    return ""
+        try:
+            Databse.cursor.execute(sql)
+            if(Database.cursor.rowcount>0):
+                return "%s has been updated successfully." %(pname.capwords())
+        except:
+            Database.db.rollback()
+            return "Failed to update this product."
+            
             
             
         

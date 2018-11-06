@@ -13,13 +13,13 @@ if __name__ == "__main__":
     product=Database()
     if choice==1:
         search=raw_input("Enter a product name: ")
-        product.search_product(search)
+        product.search_products(search)
     elif choice==2:
         pname=raw_input("Enter the product name: ")
         pprice=float(raw_input("Enter product price: "))
         pstocks=input("Enter product stocks: ")
         print ("Result: %s" % (product.insert_product(pname,pprice,pstocks)))
-    elif choice==3:
+    
         
         
         
