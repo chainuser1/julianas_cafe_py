@@ -2,7 +2,6 @@
 # To change this template file, choose Tools | Templates
 # and open the template in the editor.
 import main_menu
-import os
 from database_trans import Database
 __author__ = "Pareng Je"
 __date__ = "$11 5, 18 8:31:19 AM$"

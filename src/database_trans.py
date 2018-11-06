@@ -59,8 +59,9 @@ class Database:
         sql="UPDATE products SET pname='%s', pprice='%.2f', pstocks='%d' WHERE pid='%d'" %\
             (pname, pprice, pstocks, pid)
         try:
-            Database.cursor.execute(sql)  
-            print "%s has been updated successfully." %(pname.capwords())
+            Database.cursor.execute(sql  
+            if(Database.cursor.rowcount>0):
+                print "%s has been updated successfully." %(pname.capwords())
             Database.db.commit()
             return "Success!!!"
         except(MySQLdb.Error, MySQLdb.Warning) as e:
