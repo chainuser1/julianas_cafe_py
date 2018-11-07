@@ -10,37 +10,40 @@ class Database:
         self.con=MySQLdb.connect("localhost","root","","julianas")
         Database.db=self.con
         Database.cursor=self.con.cursor()
+    
 
-      
-    def insert_product(self, pname, pprice, pstocks):
-        sql="INSERT INTO products(pname,pprice,pstocks) VALUES('%s','%f','%d');" % (pname, pprice, pstocks)
+    #insert the new product into the products table  
+    def insert_product(self, pname, pprice, pstocks, man_id):
+        sql="INSERT INTO products(pname,pprice,pstocks, man_id) VALUES('%s','%f','%d', '%d');" % (pname, pprice, pstocks, man_id)
         try:
             Database.cursor.execute(sql)
             Database.db.commit()
             return "The Product %s was added successfully" %(pname)
         except(MySQLdb.Error, MySQLdb.Warning) as e:
             Database.db.rollback()
-            return "An error occurred."
+            return e
         Database.db.close()
-        
+    #search products    
     def search_products(self, pname):
-        sql="SELECT * FROM products WHERE pname LIKE '%s'" %("%"+pname+"%")
-        pid=0
+        sql="SELECT products.pid,products.pname, products.pprice, products.pstocks, products.man_id FROM products WHERE products.pname LIKE '%s'" %\
+        ("%"+pname+"%")
         try:
             Database.cursor.execute(sql)
             if(Database.cursor.rowcount>0):
                 print "%d found" %(Database.cursor.rowcount)
-                print "ID||Product Name||Price||Stocks"
+                print "ID||Product Name||Price||Stocks||Manufacturer ID"
                 result=Database.cursor.fetchall()
                 for row in result:
-                    print "%d||%s||%.2f||%d" %(row[0],row[1],row[2],row[3])
+                    print "%d||%s||%.2f||%d||%s" %(row[0],row[1],row[2],row[3], row[4])
                 return result
             else:
                 return "None Found"                
             Database.db.commit()
             
         except(MySQLdb.Error, MySQLdb.Warning) as e:
-            return "An error occurred."
+            return e
+        except:
+            return "An unexpected error occurred."
         Database.db.close()    
         
     def delete_product(self, pid):
