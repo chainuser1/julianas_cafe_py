@@ -11,8 +11,7 @@ class Database:
         Database.db=self.con
         Database.cursor=self.con.cursor()
 
-    
-        
+      
     def insert_product(self, pname, pprice, pstocks):
         sql="INSERT INTO products(pname,pprice,pstocks) VALUES('%s','%f','%d');" % (pname, pprice, pstocks)
         try:
@@ -22,7 +21,7 @@ class Database:
         except(MySQLdb.Error, MySQLdb.Warning) as e:
             Database.db.rollback()
             return "An error occurred."
-        
+        Database.db.close()
         
     def search_products(self, pname):
         sql="SELECT * FROM products WHERE pname LIKE '%s'" %("%"+pname+"%")
@@ -39,9 +38,11 @@ class Database:
             else:
                 return "None Found"                
             Database.db.commit()
+            
         except(MySQLdb.Error, MySQLdb.Warning) as e:
             return "An error occurred."
-            
+        Database.db.close()    
+        
     def delete_product(self, pid):
         sql="DELETE FROM products WHERE pid=%d" %(pid)
         try:
@@ -54,20 +55,19 @@ class Database:
         except:
             Database.db.rollback()
             return "An error occurred while deleting..."
+        Database.db.close()
         
     def update_product(self, pid, pname, pprice, pstocks):
-        sql="UPDATE products SET pname='%s', pprice='%.2f', pstocks='%d' WHERE pid='%d'" %\
+        sql="UPDATE products SET pname='%s', pprice='%f', pstocks='%d' WHERE pid='%d'" %\
             (pname, pprice, pstocks, pid)
         try:
-            Database.cursor.execute(sql  
-            if(Database.cursor.rowcount>0):
-                print "%s has been updated successfully." %(pname.capwords())
+            Database.cursor.execute(sql)  
             Database.db.commit()
-            return "Success!!!"
+            return "Success!!!%d record/s updated." %(Database.cursor.rowcount)
         except(MySQLdb.Error, MySQLdb.Warning) as e:
             Database.db.rollback()
             print e
-            return "Sorry!Update failed..."
+        Database.db.close()
             
             
             
