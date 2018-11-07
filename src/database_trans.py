@@ -6,6 +6,8 @@ import string
 class Database:
     cursor=0
     db=0
+    
+    #constructor
     def __init__(self):
         self.con=MySQLdb.connect("localhost","root","","julianas")
         Database.db=self.con
